@@ -3,7 +3,6 @@ import glob
 import inspect
 import logging
 import logging.config
-import math
 import os
 import platform
 import random
@@ -12,7 +11,6 @@ import signal
 import sys
 import time
 import urllib
-from copy import deepcopy
 from datetime import datetime
 from itertools import repeat
 from multiprocessing.pool import ThreadPool
@@ -22,8 +20,9 @@ from tarfile import is_tarfile
 from typing import Optional
 from zipfile import ZipFile, is_zipfile
 
-import cv2
 import IPython
+import cv2
+import math
 import numpy as np
 import pandas as pd
 import pkg_resources as pkg
@@ -124,12 +123,12 @@ def set_logging(name=LOGGING_NAME, verbose=True):
             name: {
                 "class": "logging.StreamHandler",
                 "formatter": name,
-                "level": level,}},
+                "level": level, }},
         "loggers": {
             name: {
                 "level": level,
                 "handlers": [name],
-                "propagate": False,}}})
+                "propagate": False, }}})
 
 
 set_logging(LOGGING_NAME)  # run before defining LOGGER
@@ -558,7 +557,7 @@ def check_dataset(data, autodownload=True):
 
 def check_amp(model):
     # Check PyTorch Automatic Mixed Precision (AMP) functionality. Return True on correct operation
-    from models.common import AutoShape, DetectMultiBackend
+    from models.common import AutoShape
 
     def amp_allclose(model, im):
         # All close FP32 vs AMP results
@@ -575,7 +574,7 @@ def check_amp(model):
     f = ROOT / 'data' / 'images' / 'bus.jpg'  # image to check
     im = f if f.exists() else 'https://ultralytics.com/images/bus.jpg' if check_online() else np.ones((640, 640, 3))
     try:
-        #assert amp_allclose(deepcopy(model), im) or amp_allclose(DetectMultiBackend('yolo.pt', device), im)
+        # assert amp_allclose(deepcopy(model), im) or amp_allclose(DetectMultiBackend('yolo.pt', device), im)
         LOGGER.info(f'{prefix}checks passed ✅')
         return True
     except Exception:
@@ -680,8 +679,9 @@ def one_cycle(y1=0.0, y2=1.0, steps=100):
 
 def one_flat_cycle(y1=0.0, y2=1.0, steps=100):
     # lambda function for sinusoidal ramp from y1 to y2 https://arxiv.org/pdf/1812.01187.pdf
-    #return lambda x: ((1 - math.cos(x * math.pi / steps)) / 2) * (y2 - y1) + y1
-    return lambda x: ((1 - math.cos((x - (steps // 2)) * math.pi / (steps // 2))) / 2) * (y2 - y1) + y1 if (x > (steps // 2)) else y1
+    # return lambda x: ((1 - math.cos(x * math.pi / steps)) / 2) * (y2 - y1) + y1
+    return lambda x: ((1 - math.cos((x - (steps // 2)) * math.pi / (steps // 2))) / 2) * (y2 - y1) + y1 if (
+                x > (steps // 2)) else y1
 
 
 def colorstr(*input):
