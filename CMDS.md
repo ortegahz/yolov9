@@ -1,7 +1,12 @@
+# install
+
+pip install numpy==1.26.4
+
 # ssh
 
 cd /tmp/pycharm_project_923
 cd /tmp/pycharm_project_140
+cd /tmp/pycharm_project_585
 
 # data
 
@@ -19,6 +24,12 @@ export CUDA_VISIBLE_DEVICES=0
 python detect.py --source ./data/images/horses.jpg --img 640 --device 0 --weights /home/Huangzhe/Test/yolov9-c-converted.pt --name yolov9_c_c_640_detect
 
 python detect_dual.py --source /home/manu/tmp/BOSH-FM数据采集/xiang/X-170m-002.mp4 --img 1280 --device 0 --weights /run/user/1000/gvfs/smb-share:server=172.20.254.200,share=sharedfolder/Test/yolov9-s-fire-12809/weights/best.pt --name yolov9_s_c_1280_detect --view-img --conf-thres 0.25
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python detect_dual.py --source /home/Huangzhe/test/coco/coco/train2017 --img 1280 --device 7 --weights /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_6/weights/last.pt --name manu_detect --save-txt --save-conf --conf-thres 0.001 --project /home/Huangzhe/test/runs/test
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python detect_dual.py --source /home/Huangzhe/test/manu-pc/ST8000DM004/jade_raw_data/03数据标注-samples-merge --img 1280 --device 7 --weights /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_6/weights/last.pt --name detect --save-txt --save-conf --conf-thres 0.01 --project /home/Huangzhe/test/runs/fire
+
+CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python detect_dual.py --source /home/Huangzhe/test/manu-pc/tmp/点火视频.mp4 --img 1280 --device 7 --weights /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_6/weights/last.pt --name detect --save-txt --save-conf --conf-thres 0.1 --project /home/Huangzhe/test/manu-pc/tmp/runs/fire
 
 # evaluation
 
@@ -46,8 +57,11 @@ torchrun --nproc_per_node 8 --master_port 9527 train_dual.py --workers 8 --devic
 
 torchrun --nproc_per_node 8 --master_port 9527 train_dual.py --workers 8 --device 0,1,2,3,4,5,6,7 --sync-bn --batch 120 --data data/fire.yaml --img 1280 --cfg models/detect/yolov9-s.yaml --weights '/home/Huangzhe/test/yolov9-s.pt' --name yolov9-s-fire-s1280_ --hyp hyp.scratch-high.yaml --min-items 0 --epochs 500 --close-mosaic 15 --project '/home/Huangzhe/test/runs/train'
 
+screen torchrun --nproc_per_node 8 --master_port 9527 train_dual.py --workers 8 --device 0,1,2,3,4,5,6,7 --sync-bn --batch 120 --data data/fire.yaml --img 1280 --cfg models/detect/yolov9-s.yaml --weights '/home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_6/weights/last.pt' --name yolov9-s-fire-s1280_ --hyp hyp.scratch-high.yaml --min-items 0 --epochs 500 --close-mosaic 15 --project '/home/Huangzhe/test/runs/train' --patience 0
+
 # tensorboard
 
-tensorboard --logdir /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_3 --bind_all
+tensorboard --logdir /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_6 --bind_all
+tensorboard --logdir /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_10 --bind_all
 http://172.20.254.200:6007/
 http://172.20.254.132:6006/

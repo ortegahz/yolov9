@@ -233,6 +233,44 @@ class LoadScreenshots:
         self.frame += 1
         return str(self.screen), im, im0, None, s  # screen, img, original img, im0s, s
 
+# TODO:
+class LoadNumpy:
+    def __init__(self, npy, img_size=640, stride=32, auto=True, transforms=None, vid_stride=1):
+        self.img_size = img_size
+        self.stride = stride
+        self.files = [npy]
+        self.nf = 1
+        self.mode = 'image'
+        self.auto = auto
+        self.transforms = transforms  # optional
+        self.vid_stride = vid_stride  # video frame-rate stride
+        self.cap = None
+        self.path = 'pseudo'
+
+    def __iter__(self):
+        self.count = 0
+        return self
+
+    def __next__(self):
+        path = self.path
+        if self.count == self.nf:
+            raise StopIteration
+        im0 = self.files[self.count]  # BGR
+        self.count += 1
+        assert im0 is not None
+        s = f'image {self.count}/{self.nf} {path}: '
+
+        if self.transforms:
+            im = self.transforms(im0)  # transforms
+        else:
+            im = letterbox(im0, self.img_size, stride=self.stride, auto=self.auto)[0]  # padded resize
+            im = im.transpose((2, 0, 1))[::-1]  # HWC to CHW, BGR to RGB
+            im = np.ascontiguousarray(im)  # contiguous
+
+        return path, im, im0, self.cap, s
+
+    def __len__(self):
+        return self.nf  # number of files
 
 class LoadImages:
     # YOLOv5 image/video dataloader, i.e. `python detect.py --source image.jpg/vid.mp4`
