@@ -63,5 +63,6 @@ screen torchrun --nproc_per_node 8 --master_port 9527 train_dual.py --workers 8 
 
 tensorboard --logdir /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_6 --bind_all
 tensorboard --logdir /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_10 --bind_all
+tensorboard --logdir /home/Huangzhe/test/runs/train/yolov9-s-fire-s1280_11 --bind_all
 http://172.20.254.200:6007/
 http://172.20.254.132:6006/

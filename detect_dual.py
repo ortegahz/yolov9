@@ -239,6 +239,9 @@ def parse_opt():
     parser.add_argument('--half', action='store_true', help='use FP16 half-precision inference')
     parser.add_argument('--dnn', action='store_true', help='use OpenCV DNN for ONNX inference')
     parser.add_argument('--vid-stride', type=int, default=1, help='video frame-rate stride')
+    parser.add_argument('--save_root', type=str, default='/home/manu/tmp/fire_test_results')
+    parser.add_argument('--path_video', default='/media/manu/ST2000DM005-2U91/fire/test/V3/positive/fire (138).mp4')
+    parser.add_argument('--show', default=False)
     opt = parser.parse_args()
     opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
     print_args(vars(opt))
