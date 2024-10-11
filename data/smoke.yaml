@@ -1,0 +1,10 @@
+path: /home/Huangzhe/test/smoke_three_classes_V1_20240820  # dataset root dir
+train: train.txt  # train images (relative to 'path')
+val: val.txt  # val images (relative to 'path')
+
+# Classes
+names:
+  0: smoke
+  1: wire
+  2: dense
+
